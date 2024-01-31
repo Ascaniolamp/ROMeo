@@ -1,0 +1,22 @@
+{
+	"defaultConsole":"PS3",
+
+	"maxItems":9,
+
+	"styleLogos":true,
+	"sitesLogos":{
+		"vimm.net":"media/vimm.png",
+		"archive.org":"media/archive.png"
+	},
+	"logoThemes":{
+		"media/vimm.png":"dark",
+		"media/archive.png":"light"
+	},
+
+	"consoles":{
+		"PSP":"res/PSP.json",
+		"PSX":"res/PSX.json",
+		"PS3":"res/PS3.json",
+		"NDS":"res/NDS.json"
+	}
+}
