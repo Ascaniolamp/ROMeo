@@ -1,9 +1,9 @@
 function onLoad(){
 	let urlParam = window.location.search.substr(1);
-	caricaRomList(0,urlParam);
+	loadRomList(0,urlParam);
 }
 
-function caricaRomList(from, romConsole){
+function loadRomList(from, romConsole){
 	fetch('config.json')
 	.then(res => res.json())
 	.then(confOBJ => {
@@ -38,7 +38,7 @@ function caricaRomList(from, romConsole){
 					confOBJ.logoThemes
 					];
 
-				let elem = creaRomItem(
+				let elem = createRomItem(
 					i+1,
 					rom.title,
 					rom.link,
@@ -69,7 +69,7 @@ function caricaRomList(from, romConsole){
 	})
 }
 
-function creaRomItem(num, romTitle, romURL, romDescription, romRelease, logoInfo){
+function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoInfo){
 	const romID = document.getElementById('gridList').romConsole + "-" + num;
 	var box = document.createElement('div');
 	box.classList.add('romItem');
@@ -152,7 +152,7 @@ function createNextButton(num, from, romConsole, disabled){
 		element.disabled = disabled;
 		element.classList.add('currentPageButton');
 	}
-	element.addEventListener('click',function(){caricaRomList(from,romConsole)},false);
+	element.addEventListener('click',function(){loadRomList(from,romConsole)},false);
 
 	return element;}
 
