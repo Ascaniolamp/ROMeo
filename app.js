@@ -1,13 +1,18 @@
+function exists(variable){ return !(variable == "" || variable === undefined || variable === null); }
+function download(url){ window.open(url, '_self'); }
+function edit(id){ alert("ID: "+id); }
+
 function onLoad(){
 	let urlParam = window.location.search.substr(1);
 	loadRomList(0,urlParam);
 }
 
-function loadRomList(from, romConsole){
+function loadRomList(from, romConsole)
+{
 	fetch('config.json')
 	.then(res => res.json())
 	.then(confOBJ => {
-		if(romConsole==""){romConsole = confOBJ.defaultConsole;};
+		if(romConsole=="") romConsole = confOBJ.defaultConsole;
 		romConsole = romConsole.replace("console=",'');
 
 		const grid = document.getElementById('gridList');
@@ -82,8 +87,8 @@ function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoIn
 	element = createReleaseSpan(romRelease); box.appendChild(element);
 	element = createDescriptionParagraph(romDescription); box.appendChild(element);
 
-	if(romTitle=="" && romURL==""){box.classList.add('redBox');}
-	else if(romTitle=="" || romURL==""){box.classList.add('yellowBox');}
+	if(romTitle == "" && romURL == "") box.classList.add('redBox');
+	else if(romTitle == "" || romURL == "") box.classList.add('yellowBox');
 
 	return box;
 }
@@ -96,7 +101,7 @@ function createDownloadButton(romURL, logoInfo){
 	var sitesLogos = logoInfo[1];
 	var logoThemes = logoInfo[2];
 
-	if(romURL!=""){
+	if(romURL != ""){
 		let website = new URL(romURL).hostname;
 
 		if(website in sitesLogos && style){
@@ -109,52 +114,67 @@ function createDownloadButton(romURL, logoInfo){
 			element.style.backgroundImage = "url('media/download.png')";
 			element.classList.add('darkBackground')
 		}
-		element.addEventListener('click',function(){download(romURL)},false);
+
+		element.addEventListener('click',function(){ download(romURL) },false);
 	}
-	else{element.addEventListener('click',function(){alert("No download links")},false);}
-	return element;}
+	else element.addEventListener('click',function(){ alert("No download links") },false);
+
+	return element;
+}
+
 function createEditButton(romID){
 	var element = document.createElement('button');
 	element.classList.add('romEdit');
 	element.style.backgroundImage = "url('media/edit.png')";
-	element.addEventListener('click',function(){edit(romID)},false);
-	return element;}
+	element.addEventListener('click',function(){ edit(romID) },false);
+
+	return element;
+}
+
 function createTitleHeader(romTitle){
 	var element = document.createElement('h2');
 	element.classList.add('romTitle');
-	if(romTitle!=""){element.textContent = romTitle;}
-	else{element.textContent = "NO TITLE";}
-	return element;}
+
+	if(romTitle != "") element.textContent = romTitle;
+	else element.textContent = "NO TITLE";
+
+	return element;
+}
+
 function createReleaseSpan(romRelease){
 	var element = document.createElement('span');
 	element.classList.add('romRelease');
-	if(romRelease!=""){element.textContent = romRelease;}
+
+	if(romRelease != "") element.textContent = romRelease;
 	else{
 		element.textContent = "????";
-		element.classList.add('greyedOut')
+		element.classList.add('greyedOut');
 	}
-	return element;}
+
+	return element;
+}
+
 function createDescriptionParagraph(romDescription){
 	var element = document.createElement('p');
 	element.classList.add('romDescription');
-	if(romDescription==""){
+
+	if(romDescription != "") element.textContent = romDescription;
+	else{
 		element.textContent = "No description.";
-		element.classList.add('greyedOut')
+		element.classList.add('greyedOut');
 	}
-	else{element.textContent = romDescription;}
-	return element;}
+
+	return element;
+}
 
 function createNextButton(num, from, romConsole, disabled){
 	var element = document.createElement('button');
 	element.textContent = num;
 	element.classList.add('pageButton');
-	if(disabled){
-		element.disabled = disabled;
-		element.classList.add('currentPageButton');
-	}
-	element.addEventListener('click',function(){loadRomList(from,romConsole)},false);
+	element.addEventListener('click',function(){ loadRomList(from,romConsole) },false);
 
-	return element;}
+	element.disabled = disabled;
+	if(disabled) element.classList.add('currentPageButton');
 
-function download(url){window.open(url, '_self');}
-function edit(id){alert("ID: "+id);}
+	return element;
+}
