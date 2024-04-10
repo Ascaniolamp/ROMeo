@@ -12,7 +12,7 @@ function loadRomList(from, romConsole)
 	fetch('config.json')
 	.then(res => res.json())
 	.then(confOBJ => {
-		if(romConsole=="") romConsole = confOBJ.defaultConsole;
+		if(romConsole == "") romConsole = confOBJ.defaultConsole;
 		romConsole = romConsole.replace("console=",'');
 
 		const grid = document.getElementById('gridList');
