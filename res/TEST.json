@@ -1,8 +1,8 @@
 [
 	{
 		"title":"EXAMPLE ITEM!",
-		"link":"https://example.com/",
-		"altLinks":["https://google.com"],
+		"link":"https://github.com/Ascaniolamp/ROMeo-JSON",
+		"altLinks":["https://example.com"],
 		"description":"Example description.",
 		"release":"6th April 2024"
 	}
