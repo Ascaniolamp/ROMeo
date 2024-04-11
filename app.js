@@ -21,7 +21,7 @@ function loadRomList(from, romConsole)
 		grid.textContent = '';
 
 		let consolesList = confOBJ.consoles;
-		if(consolesList[romConsole] === undefined){
+		if(!exists(consolesList[romConsole])){
 			alert("Console '" + romConsole + "' not found.");
 			return;
 		}
