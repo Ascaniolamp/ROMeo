@@ -9,7 +9,7 @@ function onLoad(){
 
 function loadRomList(from, romConsole)
 {
-	fetch('res/config.json')
+	fetch('config.json')
 	.then(res => res.json())
 	.then(confOBJ => {
 		if(!exists(romConsole)) romConsole = confOBJ.defaultConsole;
