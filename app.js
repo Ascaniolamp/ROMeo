@@ -9,10 +9,10 @@ function onLoad(){
 
 function loadRomList(from, romConsole)
 {
-	fetch('config.json')
+	fetch('res/config.json')
 	.then(res => res.json())
 	.then(confOBJ => {
-		if(romConsole == "") romConsole = confOBJ.defaultConsole;
+		if(!exists(romConsole)) romConsole = confOBJ.defaultConsole;
 		romConsole = romConsole.replace("console=",'');
 
 		const grid = document.getElementById('gridList');
@@ -87,8 +87,8 @@ function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoIn
 	element = createReleaseSpan(romRelease); box.appendChild(element);
 	element = createDescriptionParagraph(romDescription); box.appendChild(element);
 
-	if(romTitle == "" && romURL == "") box.classList.add('redBox');
-	else if(romTitle == "" || romURL == "") box.classList.add('yellowBox');
+	if(!exists(romTitle) && !exists(romURL)) box.classList.add('redBox');
+	else if(!exists(romTitle) || !exists(romURL)) box.classList.add('yellowBox');
 
 	return box;
 }
@@ -101,18 +101,19 @@ function createDownloadButton(romURL, logoInfo){
 	var sitesLogos = logoInfo[1];
 	var logoThemes = logoInfo[2];
 
-	if(romURL != ""){
+	if(exists(romURL)){
 		let website = new URL(romURL).hostname;
 
 		if(website in sitesLogos && style){
 			let logo = sitesLogos[website];
 			let theme = logoThemes[logo];
+
 			element.style.backgroundImage = "url('" + logo + "')";
 			element.classList.add(theme + "Background");
 		}
 		else{
 			element.style.backgroundImage = "url('media/download.png')";
-			element.classList.add('darkBackground')
+			element.classList.add('darkBackground');
 		}
 
 		element.addEventListener('click',function(){ download(romURL) },false);
@@ -135,7 +136,7 @@ function createTitleHeader(romTitle){
 	var element = document.createElement('h2');
 	element.classList.add('romTitle');
 
-	if(romTitle != "") element.textContent = romTitle;
+	if(exists(romTitle)) element.textContent = romTitle;
 	else element.textContent = "NO TITLE";
 
 	return element;
@@ -145,7 +146,7 @@ function createReleaseSpan(romRelease){
 	var element = document.createElement('span');
 	element.classList.add('romRelease');
 
-	if(romRelease != "") element.textContent = romRelease;
+	if(exists(romRelease)) element.textContent = romRelease;
 	else{
 		element.textContent = "????";
 		element.classList.add('greyedOut');
@@ -158,7 +159,7 @@ function createDescriptionParagraph(romDescription){
 	var element = document.createElement('p');
 	element.classList.add('romDescription');
 
-	if(romDescription != "") element.textContent = romDescription;
+	if(exists(romDescription)) element.textContent = romDescription;
 	else{
 		element.textContent = "No description.";
 		element.classList.add('greyedOut');

@@ -1,5 +1,5 @@
 {
-	"defaultConsole":"PS3",
+	"defaultConsole":"TEST",
 
 	"maxItems":9,
 
@@ -14,9 +14,6 @@
 	},
 
 	"consoles":{
-		"PSP":"res/PSP.json",
-		"PSX":"res/PSX.json",
-		"PS3":"res/PS3.json",
-		"NDS":"res/NDS.json"
+		"TEST":"res/TEST.json"
 	}
 }
