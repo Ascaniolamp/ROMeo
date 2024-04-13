@@ -2,5 +2,7 @@
 	"defaultConsole":"TEST",
 	"consoles":{
 		"TEST":"res/TEST.json"
-	}
+	},
+
+	"maxItems":2
 }

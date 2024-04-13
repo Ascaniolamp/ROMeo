@@ -1,185 +1,201 @@
 function exists(variable) {
-	return !(variable === "" || variable === undefined || variable === null);
+	return !(variable === '' || variable === undefined || variable === null);
 }
 
 function download(url) {
-	window.open(url, '_self');
+	window.open(url, '_blank');
 }
 
 function edit(id) {
-	alert("ID: "+id);
+	alert('ROM-ID: ' + id);
 }
 
 function onLoad() {
-	let urlParam = window.location.search.substr(1);
-	loadRomList(0,urlParam);
+	const urlParameters = window.location.search.substr(1);
+	loadRomList(0, urlParameters);
 }
 
-function loadRomList(from, romConsole) {
+function loadRomList(firstItem, consoleName) {
 	fetch('config.json')
 	.then(res => res.json())
 	.then(configOBJ => {
 
-		romConsole = exists(romConsole) ? romConsole.replace("console=",'') : configOBJ.defaultConsole;
+		consoleName = exists(consoleName)
+					? consoleName.replace('console=','')
+					: configOBJ.defaultConsole;
 
+		document.getElementById('gridTitle').textContent = consoleName + ' games:';
 		const grid = document.getElementById('gridList');
-		grid.romConsole = romConsole;
-		grid.from = from;
-		document.getElementById('gridTitle').textContent = romConsole.toUpperCase() + " GAMES";
+		grid.consoleName = consoleName;
 		grid.textContent = '';
 
-
 		const consolesList = configOBJ.consoles;
-		if(!exists(consolesList[romConsole])) {
-			alert("Console '" + romConsole + "' not found.");
+		if(!exists(consolesList[consoleName])) {
+			alert('Console \'' + consoleName + '\' not found.');
 			return;
 		}
 
-		fetch(consolesList[romConsole])
+		fetch(consolesList[consoleName])
 		.then(res => res.json())
 		.then(consoleOBJ => {
 
 			const consoleSize = consoleOBJ.length;
-			const maxItems = exists(configOBJ.maxItems) ? configOBJ.maxItems : 0;
-			const until = (maxItems < 1 || from + maxItems > consoleSize) ? consoleSize : (from + maxItems);
+			const maxItems = exists(configOBJ.maxItems)
+							? configOBJ.maxItems
+							: 0;
 
-			const logoInfo = {
-				"styleLogos": exists(configOBJ.styleLogos) ? configOBJ.styleLogos : true,
-				"sitesLogos": (exists(configOBJ.sitesLogos) && exists(configOBJ.styleLogos)) ? configOBJ.sitesLogos : {},
-				"logoThemes": (exists(configOBJ.logoThemes) && exists(configOBJ.styleLogos)) ? configOBJ.logoThemes : {}
+			const singlePage = maxItems < 1;
+			const penultimatePage = firstItem + maxItems > consoleSize;
+			const lastItem = (singlePage || penultimatePage)
+						? consoleSize
+						: (firstItem + maxItems);
+
+			const styling = {
+				"styleLogos": exists(configOBJ.styleLogos)
+							? configOBJ.styleLogos
+							: true,
+				"sitesLogos": (exists(configOBJ.sitesLogos) && exists(configOBJ.styleLogos))
+							? configOBJ.sitesLogos
+							: {},
+				"logoThemes": (exists(configOBJ.logoThemes) && exists(configOBJ.styleLogos))
+							? configOBJ.logoThemes
+							: {}
 			};
 
-			for(let i = from; i < until; i++) {
+			for(let i = firstItem; i < lastItem; i++) {
 				let rom = consoleOBJ[i];
 
-				let elem = createRomItem(
-					i+1,
-					rom.title,
-					rom.link,
-					rom.description,
-					rom.release,
-					logoInfo
+				grid.appendChild(
+					createRomItem(
+						i + 1,
+						rom.title,
+						rom.link,
+						rom.description,
+						rom.release,
+						styling
+					)
 				);
-
-				grid.appendChild(elem);
 			}
 
-			if(maxItems >= 1) {
-				var buttons = document.getElementById('pagesButtons');
-				buttons.textContent = '';
-
-				const neededPages = Math.ceil(consoleSize / maxItems);
-
-				for(let i = 0; i < neededPages; i++) {
-					let nextFrom = i * maxItems;
-					let thisPage = (nextFrom == from);
-
-					let elem = createNextButton(i+1, nextFrom, romConsole, thisPage);
-					buttons.appendChild(elem);
-				}
-			}
-
+			if(!singlePage) loadPageButtons(consoleName, consoleSize, firstItem, maxItems);
 		})
 	})
 }
 
-function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoInfo) {
-	const romID = document.getElementById('gridList').romConsole + "-" + num;
+function createRomItem(num, title, link, description, release, styling) {
+	const romID = document.getElementById('gridList').consoleName + '-' + num;
+
 	var box = document.createElement('div');
 	box.classList.add('romItem');
 	box.id = romID;
 
-	var element;
-	element = createDownloadButton(romURL,logoInfo); box.appendChild(element);
-	element = createEditButton(romID); box.appendChild(element);
-	element = createTitleHeader(romTitle); box.appendChild(element);
-	element = createReleaseSpan(romRelease); box.appendChild(element);
-	element = createDescriptionParagraph(romDescription); box.appendChild(element);
+	if(exists(link)) box.appendChild(createDownloadButton(link,styling));
+	box.appendChild(createEditButton(romID));
+	box.appendChild(createTitleHeader(title));
+	box.appendChild(createReleaseSpan(release));
+	box.appendChild(createDescriptionParagraph(description));
 
-	if(!exists(romTitle) && !exists(romURL)) box.classList.add('redBox');
-	else if(!exists(romTitle) || !exists(romURL)) box.classList.add('yellowBox');
+	if(!exists(title) && !exists(link)) box.classList.add('redBox');
+	else if(!exists(title) || !exists(link)) box.classList.add('yellowBox');
 
 	return box;
 }
 
-function createDownloadButton(romURL, logoInfo) {
+function createDownloadButton(link, styling) {
 	var element = document.createElement('button');
-	element.classList.add('romURL');
+	element.classList.add('downloadButton');
 
-	if(exists(romURL)) {
-		let website = new URL(romURL).hostname;
-
-		if(logoInfo.styleLogos && website in logoInfo.sitesLogos) {
-			let logo = logoInfo.sitesLogos[website];
-			let theme = logoInfo.logoThemes[logo];
-
-			element.style.backgroundImage = "url('" + logo + "')";
-			element.classList.add(theme + "Background");
-		}
-		else {
-			element.style.backgroundImage = "url('media/download.png')";
-			element.classList.add('darkBackground');
-		}
-
-		element.addEventListener('click',function(){ download(romURL) },false);
+	if(!exists(link)) {
+		element.addEventListener('click', function missingLinkAlert(){alert('No download links')}, false);
+		return element;
 	}
-	else element.addEventListener('click',function(){ alert("No download links") },false);
+
+	element.addEventListener('click', function downloadItem(){download(link)}, false);
+
+	let website = new URL(link).hostname;
+	if(styling.styleLogos && website in styling.sitesLogos) {
+		let logo = styling.sitesLogos[website];
+		let theme = styling.logoThemes[logo];
+
+		element.style.backgroundImage =' url(\'' + logo + '\')';
+		element.classList.add(theme + 'Background');
+	}
+	else {
+		element.style.backgroundImage = 'url(\'media/download.png\')';
+		element.classList.add('darkBackground');
+	}
 
 	return element;
 }
 
-function createEditButton(romID) {
+function createEditButton(id) {
 	var element = document.createElement('button');
-	element.classList.add('romEdit');
-	element.style.backgroundImage = "url('media/edit.png')";
-	element.addEventListener('click',function(){ edit(romID) },false);
+	element.classList.add('editButton');
+
+	element.style.backgroundImage = 'url(\'media/edit.png\')';
+	element.addEventListener('click', function editItem(){edit(id)}, false);
 
 	return element;
 }
 
-function createTitleHeader(romTitle) {
+function createTitleHeader(title) {
 	var element = document.createElement('h2');
-	element.classList.add('romTitle');
+	element.classList.add('itemTitle');
 
-	if(exists(romTitle)) element.textContent = romTitle;
-	else element.textContent = "NO TITLE";
+	if(exists(title)) element.textContent = title;
+	else element.textContent = 'NO TITLE';
 
 	return element;
 }
 
-function createReleaseSpan(romRelease) {
+function createReleaseSpan(release) {
 	var element = document.createElement('span');
-	element.classList.add('romRelease');
+	element.classList.add('itemRelease');
 
-	if(exists(romRelease)) element.textContent = romRelease;
+	if(exists(release)) element.textContent = release;
 	else {
-		element.textContent = "????";
+		element.textContent = '????';
 		element.classList.add('greyedOut');
 	}
 
 	return element;
 }
 
-function createDescriptionParagraph(romDescription) {
+function createDescriptionParagraph(description) {
 	var element = document.createElement('p');
-	element.classList.add('romDescription');
+	element.classList.add('itemDescription');
 
-	if(exists(romDescription)) element.textContent = romDescription;
+	if(exists(description)) element.textContent = description;
 	else {
-		element.textContent = "No description.";
+		element.textContent = 'No description.';
 		element.classList.add('greyedOut');
 	}
 
 	return element;
 }
 
-function createNextButton(num, from, romConsole, disabled) {
-	var element = document.createElement('button');
-	element.textContent = num;
-	element.classList.add('pageButton');
-	element.addEventListener('click',function(){ loadRomList(from,romConsole) },false);
+function loadPageButtons(consoleName, consoleSize, activeFirstItem, maxItems) {
+	const neededPages = Math.ceil(consoleSize / maxItems);
 
+	var pages = document.getElementById('pagesButtons');
+	pages.textContent = '';
+
+	for(let i = 0; i < neededPages; i++) {
+		let btnFirstItem = i * maxItems;
+		let pageActive = (btnFirstItem === activeFirstItem);
+
+		pages.appendChild(createPageButton(i + 1, btnFirstItem, consoleName, pageActive));
+	}
+}
+
+function createPageButton(num, from, consoleName, disabled) {
+	var element = document.createElement('button');
+	element.classList.add('pageButton');
+
+	element.addEventListener('click', function loadNewPage(){loadRomList(from,consoleName)}, false);
 	element.disabled = disabled;
+	element.textContent = num;
+
 	if(disabled) element.classList.add('currentPageButton');
 
 	return element;
