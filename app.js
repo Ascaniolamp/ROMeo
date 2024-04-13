@@ -1,6 +1,14 @@
-function exists(variable) { return !(variable == "" || variable === undefined || variable === null); }
-function download(url) { window.open(url, '_self'); }
-function edit(id) { alert("ID: "+id); }
+function exists(variable) {
+	return !(variable == "" || variable === undefined || variable === null);
+}
+
+function download(url) {
+	window.open(url, '_self');
+}
+
+function edit(id) {
+	alert("ID: "+id);
+}
 
 function onLoad() {
 	let urlParam = window.location.search.substr(1);
@@ -10,8 +18,8 @@ function onLoad() {
 function loadRomList(from, romConsole) {
 	fetch('config.json')
 	.then(res => res.json())
-	.then(confOBJ => {
-		if(!exists(romConsole)) romConsole = confOBJ.defaultConsole;
+	.then(configOBJ => {
+		if(!exists(romConsole)) romConsole = configOBJ.defaultConsole;
 		romConsole = romConsole.replace("console=",'');
 
 		const grid = document.getElementById('gridList');
@@ -19,7 +27,7 @@ function loadRomList(from, romConsole) {
 		document.getElementById('gridTitle').textContent = romConsole.toUpperCase() + " GAMES";
 		grid.textContent = '';
 
-		let consolesList = confOBJ.consoles;
+		let consolesList = configOBJ.consoles;
 		if(!exists(consolesList[romConsole])){
 			alert("Console '" + romConsole + "' not found.");
 			return;
@@ -27,19 +35,19 @@ function loadRomList(from, romConsole) {
 
 		fetch(consolesList[romConsole])
 		.then(res => res.json())
-		.then(romOBJ => {
-			let romLength = romOBJ.length;
-			let maxItems = confOBJ.maxItems;
+		.then(consoleOBJ => {
+			let romLength = consoleOBJ.length;
+			let maxItems = configOBJ.maxItems;
 			let until = from + maxItems;
 
 			if(maxItems < 1 || until > romLength){until = romLength;}
 
 			for(let i = from; i < until; i++){
-				let rom = romOBJ[i];
+				let rom = consoleOBJ[i];
 				let logoInfo = [
-					confOBJ.styleLogos,
-					confOBJ.sitesLogos,
-					confOBJ.logoThemes
+					configOBJ.styleLogos,
+					configOBJ.sitesLogos,
+					configOBJ.logoThemes
 					];
 
 				let elem = createRomItem(
