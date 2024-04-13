@@ -1,5 +1,5 @@
 function exists(variable) {
-	return !(variable == "" || variable === undefined || variable === null);
+	return !(variable === "" || variable === undefined || variable === null);
 }
 
 function download(url) {
@@ -19,16 +19,18 @@ function loadRomList(from, romConsole) {
 	fetch('config.json')
 	.then(res => res.json())
 	.then(configOBJ => {
-		if(!exists(romConsole)) romConsole = configOBJ.defaultConsole;
-		romConsole = romConsole.replace("console=",'');
+
+		romConsole = exists(romConsole) ? romConsole.replace("console=",'') : configOBJ.defaultConsole;
 
 		const grid = document.getElementById('gridList');
-		grid.romConsole = romConsole; grid.from = from;
+		grid.romConsole = romConsole;
+		grid.from = from;
 		document.getElementById('gridTitle').textContent = romConsole.toUpperCase() + " GAMES";
 		grid.textContent = '';
 
-		let consolesList = configOBJ.consoles;
-		if(!exists(consolesList[romConsole])){
+
+		const consolesList = configOBJ.consoles;
+		if(!exists(consolesList[romConsole])) {
 			alert("Console '" + romConsole + "' not found.");
 			return;
 		}
@@ -36,19 +38,19 @@ function loadRomList(from, romConsole) {
 		fetch(consolesList[romConsole])
 		.then(res => res.json())
 		.then(consoleOBJ => {
-			let romLength = consoleOBJ.length;
-			let maxItems = configOBJ.maxItems;
-			let until = from + maxItems;
 
-			if(maxItems < 1 || until > romLength){until = romLength;}
+			const consoleSize = consoleOBJ.length;
+			const maxItems = exists(configOBJ.maxItems) ? configOBJ.maxItems : 0;
+			const until = (maxItems < 1 || from + maxItems > consoleSize) ? consoleSize : (from + maxItems);
 
-			for(let i = from; i < until; i++){
+			const logoInfo = {
+				"styleLogos": exists(configOBJ.styleLogos) ? configOBJ.styleLogos : true,
+				"sitesLogos": (exists(configOBJ.sitesLogos) && exists(configOBJ.styleLogos)) ? configOBJ.sitesLogos : {},
+				"logoThemes": (exists(configOBJ.logoThemes) && exists(configOBJ.styleLogos)) ? configOBJ.logoThemes : {}
+			};
+
+			for(let i = from; i < until; i++) {
 				let rom = consoleOBJ[i];
-				let logoInfo = [
-					configOBJ.styleLogos,
-					configOBJ.sitesLogos,
-					configOBJ.logoThemes
-					];
 
 				let elem = createRomItem(
 					i+1,
@@ -57,24 +59,24 @@ function loadRomList(from, romConsole) {
 					rom.description,
 					rom.release,
 					logoInfo
-					);
+				);
 
 				grid.appendChild(elem);
 			}
 
-			if(!maxItems < 1){
+			if(maxItems >= 1) {
 				var buttons = document.getElementById('pagesButtons');
 				buttons.textContent = '';
 
-				let neededPages = Math.ceil(romLength / maxItems);
+				const neededPages = Math.ceil(consoleSize / maxItems);
 
-				for(let i = 0; i < neededPages; i++){
-					let nextFrom = i*maxItems;
+				for(let i = 0; i < neededPages; i++) {
+					let nextFrom = i * maxItems;
 					let thisPage = (nextFrom == from);
+
 					let elem = createNextButton(i+1, nextFrom, romConsole, thisPage);
 					buttons.appendChild(elem);
 				}
-
 			}
 
 		})
@@ -104,21 +106,17 @@ function createDownloadButton(romURL, logoInfo) {
 	var element = document.createElement('button');
 	element.classList.add('romURL');
 
-	var style = logoInfo[0];
-	var sitesLogos = logoInfo[1];
-	var logoThemes = logoInfo[2];
-
-	if(exists(romURL)){
+	if(exists(romURL)) {
 		let website = new URL(romURL).hostname;
 
-		if(website in sitesLogos && style){
-			let logo = sitesLogos[website];
-			let theme = logoThemes[logo];
+		if(logoInfo.styleLogos && website in logoInfo.sitesLogos) {
+			let logo = logoInfo.sitesLogos[website];
+			let theme = logoInfo.logoThemes[logo];
 
 			element.style.backgroundImage = "url('" + logo + "')";
 			element.classList.add(theme + "Background");
 		}
-		else{
+		else {
 			element.style.backgroundImage = "url('media/download.png')";
 			element.classList.add('darkBackground');
 		}
@@ -154,7 +152,7 @@ function createReleaseSpan(romRelease) {
 	element.classList.add('romRelease');
 
 	if(exists(romRelease)) element.textContent = romRelease;
-	else{
+	else {
 		element.textContent = "????";
 		element.classList.add('greyedOut');
 	}
@@ -167,7 +165,7 @@ function createDescriptionParagraph(romDescription) {
 	element.classList.add('romDescription');
 
 	if(exists(romDescription)) element.textContent = romDescription;
-	else{
+	else {
 		element.textContent = "No description.";
 		element.classList.add('greyedOut');
 	}
