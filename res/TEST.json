@@ -5,29 +5,5 @@
 		"altLinks":["https://example.com"],
 		"description":"Example description.",
 		"release":"13th April 2024"
-	},
-
-	{
-		"title":"Example item!",
-		"link":"https://github.com/Ascaniolamp/ROMeo-JSON",
-		"altLinks":["https://example.com"],
-		"description":"Example description.",
-		"release":"13th April 2024"
-	},
-
-	{
-		"title":"Example item!",
-		"link":"https://github.com/Ascaniolamp/ROMeo-JSON",
-		"altLinks":["https://example.com"],
-		"description":"Example description.",
-		"release":"13th April 2024"
-	},
-
-	{
-		"title":"Example item!",
-		"link":"https://github.com/Ascaniolamp/ROMeo-JSON",
-		"altLinks":["https://example.com"],
-		"description":"Example description.",
-		"release":"13th April 2024"
 	}
 ]
