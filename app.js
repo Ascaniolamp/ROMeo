@@ -1,14 +1,13 @@
-function exists(variable){ return !(variable == "" || variable === undefined || variable === null); }
-function download(url){ window.open(url, '_self'); }
-function edit(id){ alert("ID: "+id); }
+function exists(variable) { return !(variable == "" || variable === undefined || variable === null); }
+function download(url) { window.open(url, '_self'); }
+function edit(id) { alert("ID: "+id); }
 
-function onLoad(){
+function onLoad() {
 	let urlParam = window.location.search.substr(1);
 	loadRomList(0,urlParam);
 }
 
-function loadRomList(from, romConsole)
-{
+function loadRomList(from, romConsole) {
 	fetch('config.json')
 	.then(res => res.json())
 	.then(confOBJ => {
@@ -74,7 +73,7 @@ function loadRomList(from, romConsole)
 	})
 }
 
-function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoInfo){
+function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoInfo) {
 	const romID = document.getElementById('gridList').romConsole + "-" + num;
 	var box = document.createElement('div');
 	box.classList.add('romItem');
@@ -93,7 +92,7 @@ function createRomItem(num, romTitle, romURL, romDescription, romRelease, logoIn
 	return box;
 }
 
-function createDownloadButton(romURL, logoInfo){
+function createDownloadButton(romURL, logoInfo) {
 	var element = document.createElement('button');
 	element.classList.add('romURL');
 
@@ -123,7 +122,7 @@ function createDownloadButton(romURL, logoInfo){
 	return element;
 }
 
-function createEditButton(romID){
+function createEditButton(romID) {
 	var element = document.createElement('button');
 	element.classList.add('romEdit');
 	element.style.backgroundImage = "url('media/edit.png')";
@@ -132,7 +131,7 @@ function createEditButton(romID){
 	return element;
 }
 
-function createTitleHeader(romTitle){
+function createTitleHeader(romTitle) {
 	var element = document.createElement('h2');
 	element.classList.add('romTitle');
 
@@ -142,7 +141,7 @@ function createTitleHeader(romTitle){
 	return element;
 }
 
-function createReleaseSpan(romRelease){
+function createReleaseSpan(romRelease) {
 	var element = document.createElement('span');
 	element.classList.add('romRelease');
 
@@ -155,7 +154,7 @@ function createReleaseSpan(romRelease){
 	return element;
 }
 
-function createDescriptionParagraph(romDescription){
+function createDescriptionParagraph(romDescription) {
 	var element = document.createElement('p');
 	element.classList.add('romDescription');
 
@@ -168,7 +167,7 @@ function createDescriptionParagraph(romDescription){
 	return element;
 }
 
-function createNextButton(num, from, romConsole, disabled){
+function createNextButton(num, from, romConsole, disabled) {
 	var element = document.createElement('button');
 	element.textContent = num;
 	element.classList.add('pageButton');
