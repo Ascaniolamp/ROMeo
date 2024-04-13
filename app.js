@@ -35,6 +35,19 @@ function loadRomList(firstItem, consoleName) {
 			return;
 		}
 
+		let stylingActive = exists(configOBJ.styleLogos)
+							? configOBJ.styleLogos
+							: true;
+		const styling = {
+			"styleLogos": stylingActive,
+			"sitesLogos": (exists(configOBJ.sitesLogos) && stylingActive)
+						? configOBJ.sitesLogos
+						: {},
+			"logoThemes": (exists(configOBJ.logoThemes) && stylingActive)
+						? configOBJ.logoThemes
+						: {}
+		};
+
 		fetch(consolesList[consoleName])
 		.then(res => res.json())
 		.then(consoleOBJ => {
@@ -49,18 +62,6 @@ function loadRomList(firstItem, consoleName) {
 			const lastItem = (singlePage || penultimatePage)
 						? consoleSize
 						: (firstItem + maxItems);
-
-			const styling = {
-				"styleLogos": exists(configOBJ.styleLogos)
-							? configOBJ.styleLogos
-							: true,
-				"sitesLogos": (exists(configOBJ.sitesLogos) && exists(configOBJ.styleLogos))
-							? configOBJ.sitesLogos
-							: {},
-				"logoThemes": (exists(configOBJ.logoThemes) && exists(configOBJ.styleLogos))
-							? configOBJ.logoThemes
-							: {}
-			};
 
 			for(let i = firstItem; i < lastItem; i++) {
 				let rom = consoleOBJ[i];
