@@ -1,7 +1,7 @@
 [
 	{
 		"title":"Example item!",
-		"link":"https://github.com/Ascaniolamp/ROMeo-JSON",
+		"link":"https://github.com/Ascaniolamp/ROMeo",
 		"altLinks":["https://example.com"],
 		"description":"Example description.",
 		"release":"13th April 2024"
