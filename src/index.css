@@ -1,0 +1,140 @@
+:root {
+	font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color-scheme: light dark;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+a {
+	font-weight: 500;
+	color: #646cff;
+	text-decoration: inherit;
+}
+a:hover {
+	color: #535bf2;
+}
+
+body {
+	margin: 0;
+	min-width: 320px;
+	min-height: 100vh;
+}
+
+h1 {
+	font-size: 3.2em;
+	line-height: 1.1;
+	text-align: center;
+}
+
+button {
+	border-radius: 8px;
+	border: 1px solid transparent;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	background-color: #1a1a1a;
+	cursor: pointer;
+	transition: border-color 0.25s;
+}
+button:hover {
+	border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+	outline: 4px auto -webkit-focus-ring-color;
+}
+
+.greyedOut{color: grey;}
+.redBox{border-color: red;}
+.yellowBox{border-color: yellow;}
+
+#consoleSearch{
+	float:left;
+}
+
+#gridList{
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	justify-items: center;
+}
+
+.romItem{
+	background-color: transparent;
+	border-width: 0.2em;
+	border-style: solid;
+	width: 25em; height: 12em;
+	padding: 1em; margin: 1em;
+	overflow-y: auto;
+}
+
+.romURL{
+	float: right;
+	width: 5em; height: 5em;
+	margin-left: 1em;
+	border: solid white 0.2em;
+	border-radius: 1em;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-size: contain;
+}
+.darkBackground{border-color: transparent;}
+.lightBackground{background-color: white;}
+
+.romEdit{
+	float: right;
+	width: 3em; height: 3em;
+	margin-left: 1em;
+	border: solid transparent 0.2em;
+	border-radius: 1em;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-size: contain;
+}
+
+.romTitle{text-align: left; margin: 0;}
+.romDescription{margin-top: 1em;}
+
+#pagesButtons{
+	margin-top: 1em;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	justify-items: center;
+	gap: 1em;
+}
+
+.pageButton{
+	width: 3em; height: 3em;
+	border: solid gainsboro 0.2em;
+	border-radius: 1em;
+	background-color: white;
+	color: #1a1a1a;
+}
+
+.currentPageButton{
+	border-color: dimgray;
+	background-color: gray;
+	color: #1a1a1a;
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		color: #213547;
+		background-color: #ffffff;
+	}
+	a:hover {
+		color: #747bff;
+	}
+	button {
+		background-color: #f9f9f9;
+	}
+}

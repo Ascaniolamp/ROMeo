@@ -1,0 +1,78 @@
+body{
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: black;
+	color: white;
+}
+
+h1{ text-align: center; }
+
+.greyedOut{ color: grey; }
+.redBox{ border-color: red; }
+.yellowBox{ border-color: yellow; }
+
+#gridList{
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	justify-items: center;
+}
+
+.romItem{
+	background-color: transparent;
+	border-width: 0.2em;
+	border-style: solid;
+	width: 25em; height: 14em;
+	padding: 1em; margin: 1em;
+	overflow-y: auto;
+}
+
+.romURL{
+	float: right;
+	width: 5em; height: 5em;
+	margin-left: 1em;
+	border: solid white 0.2em;
+	border-radius: 1em;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-size: contain;
+}
+
+.darkBackground{ border-color: transparent; }
+.lightBackground{ background-color: white; }
+
+.romEdit{
+	float: right;
+	width: 3em; height: 3em;
+	margin-left: 1em;
+	border: solid transparent 0.2em;
+	border-radius: 1em;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	background-size: contain;
+}
+
+.romTitle{ text-align: left; margin: 0; }
+.romDescription{ margin-top: 1em; }
+
+#pagesButtons{
+	margin-top: 1em;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+	justify-items: center;
+	gap: 1em;
+}
+
+.pageButton{
+	width: 3em; height: 3em;
+	border: solid gainsboro 0.2em;
+	border-radius: 1em;
+	background-color: white;
+	color: #1a1a1a;
+}
+
+.currentPageButton{
+	border-color: dimgray;
+	background-color: gray;
+	color: #1a1a1a;
+}
