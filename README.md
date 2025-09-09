@@ -8,7 +8,7 @@ A locally hostable, simple, light webapp to manage online download links for vid
 The webapp must be hosted in order to correctly fetch local files.
 This can be done by the use of a simple Apache2 installation.
 
-## <div align="center" id="Install"> 📜 Configuration 📃 </div>
+## <div align="center" id="Configuration"> 📜 Configuration 📃 </div>
 
 ### General parameters
 The configuration file must be called `config.json` and placed in the same directory as the `app.js` file.
