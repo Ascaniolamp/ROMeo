@@ -4,6 +4,9 @@
 A locally hostable, simple, light webapp to manage online download links for videogame roms, stored in JSON files.
 </div>
 
+## <div align="center" id="Install"> ⚠️ Disclaimer ⚠️ </div>
+I have stopped working on ROMeo since I learned about [RomM](https://romm.app).
+
 ## <div align="center" id="Install"> 📥 🖥️ Install 🖥️ 📥 </div>
 The webapp must be hosted in order to correctly fetch local files.
 This can be done by the use of a simple Apache2 installation.
@@ -40,3 +43,11 @@ If it's missing both parameters, the border will be red instead.
 
 ### Logos
 The `media` folder contains the logo files used inside the configuration file.
+
+## TODO
+- [ ] Button to add game
+- [ ] Button to edit and update config.json
+- [ ] Button to edit and update game
+- [ ] Add support for alt-links
+- [ ] Button to search for a game
+- [ ] Button to order games alphabetically or chronologically
